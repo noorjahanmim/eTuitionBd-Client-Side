@@ -111,7 +111,7 @@ const ProfileSettings = () => {
           <button 
             type="submit"
             disabled={loading}
-            className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-200 transition-all flex items-center justify-center gap-3 active:scale-95 ${loading ? "opacity-70 cursor-wait" : ""}`}
+            className={`w-full hover:scale-105  bg-gradient-to-r from-primary via-indigo-500 to-primary text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-200 transition-all flex items-center justify-center gap-3 active:scale-95 ${loading ? "opacity-70 cursor-wait" : ""}`}
           >
             {loading ? <span className="loading loading-spinner"></span> : <Save size={22} />}
             {loading ? "Updating..." : "Save Changes"}

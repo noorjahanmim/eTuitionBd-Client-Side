@@ -35,16 +35,13 @@ const NavBar = () => {
   return (
     <div className="sticky top-0 z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-
+{/* Logo */}
         <span className="text-xl">
                     <Logo></Logo>
                 </span>
         
-        {/* Logo */}
-        {/* <Link to="/" className="text-2xl md:text-3xl font-bold text-indigo-600">
-          eTuitionBD
-        </Link> */}
-
+        
+      
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-6 font-medium">
           <ul className="flex gap-6">{links}</ul>

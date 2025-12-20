@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaYoutube, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { TbBrandX } from "react-icons/tb";
 import { Send } from "lucide-react"; 
-import Logo from "../../../components/Logo/Logo"; // আপনার Logo কম্পোনেন্ট ইম্পোর্ট করুন
+import Logo from "../../../components/Logo/Logo"; 
 
 const Footer = () => {
   return (
@@ -11,13 +11,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           
-          {/* 1. Brand & About Section - Navbar এর মত লোগো ও নাম */}
+          {/* 1. Brand & About Section  */}
           <div className="space-y-5">
             <div className="flex flex-col items-start gap-2">
               <span className="text-xl">
                  <Logo />
               </span>
-              {/* চাইলে টেক্সট লোগো ব্যাকআপ হিসেবে রাখতে পারেন */}
+              
               {/* <h2 className="text-2xl font-bold tracking-tight text-white">
                 eTuition<span className="text-primary">Bd</span>
               </h2> */}

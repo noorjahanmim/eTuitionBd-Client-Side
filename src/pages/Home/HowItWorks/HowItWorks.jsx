@@ -83,10 +83,10 @@ const HowItWorks = () => {
           </motion.h2>
           
           {/* Custom Tab Switcher */}
-          <div className="inline-flex bg-base-200 p-1.5 rounded-2xl border border-base-300 shadow-inner">
+          <div className="inline-flex bg-base-200 p-1.5  rounded-2xl border border-base-300 shadow-inner ">
             <button 
               onClick={() => setActiveTab("tutor")}
-              className={`px-8 py-2.5 rounded-xl font-bold transition-all duration-300 ${activeTab === "tutor" ? "bg-primary text-white shadow-md" : "text-gray-500 hover:text-primary"}`}
+              className={`px-8 py-2.5 rounded-xl font-bold transition-all  duration-300 ${activeTab === "tutor" ? "bg-primary text-white shadow-md" : "text-gray-500 hover:text-primary"}`}
             >
               For Tutors
             </button>
@@ -117,7 +117,7 @@ const HowItWorks = () => {
                 return (
                   <div key={`${activeTab}-${step.id}`} className={`flex flex-col md:flex-row items-center justify-between w-full ${isEven ? "md:flex-row-reverse" : ""}`}>
                     
-                    {/* Content Card - Ager motoi side theke ashbe */}
+                    {/* Content Card */}
                     <motion.div
                       initial={{ opacity: 0, x: isEven ? 100 : -100 }}
                       whileInView={{ opacity: 1, x: 0 }}

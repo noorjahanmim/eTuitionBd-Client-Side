@@ -154,7 +154,7 @@ const TuitionDetails = () => {
 
               <div className="mt-8 pt-8 border-t border-dashed border-gray-200">
                 <p className="text-sm text-gray-500 mb-4 text-center italic">Don't miss this opportunity!</p>
-                <button className="w-full py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                <button className="w-full py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all bg-gradient-to-r from-primary via-indigo-500 to-primary">
                   APPLY TO JOB
                 </button>
               </div>

@@ -103,7 +103,7 @@ const ProfileSettings = () => {
                       <label className="text-sm font-bold text-slate-600 ml-1">Bio / Headline</label>
                       <textarea rows="3" className="w-full bg-slate-50 border border-slate-200 rounded-3xl px-6 py-4 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 transition-all outline-none font-medium text-slate-700" placeholder="e.g. Seeking a Physics tutor for HSC exam prep." />
                     </div>
-                    <button className="flex items-center gap-2 bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95">
+                    <button className="btn btn-primary btn-lg rounded-2xl shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2 px-10 group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden border-none">
                       <Save size={20} /> Update Profile
                     </button>
                   </form>

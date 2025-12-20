@@ -20,10 +20,10 @@ const DashboardLayout = () => {
   return (
     <div className="flex min-h-screen bg-slate-50">
       {/* --- Sidebar --- */}
-      <aside className="w-64 md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between fixed top-0 left-0 h-screen shadow-sm z-20">
+      <aside className="w-64 md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between fixed top-0 left-0 h-screen shadow-sm z-20  ">
         {/* Logo */}
-        <div className="p-8">
-          <h2 className="text-2xl font-black text-indigo-600 flex items-center gap-2">
+        <div className="p-8 ">
+          <h2 className="text-2xl font-black text-indigo-600 flex items-center gap-2 rounded-2xl shadow-2xl shadow-primary/30  active:scale-95 transition-all gap-2 px-10 group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden border-none">
             <MdDashboard className="text-3xl" />
             <span className="tracking-tight">eTuitionBd</span>
           </h2>
@@ -33,7 +33,7 @@ const DashboardLayout = () => {
         </div>
 
         {/* Nav Links */}
-        <nav className="flex-grow px-4 flex flex-col gap-2 overflow-y-auto pb-6 custom-scrollbar">
+        <nav className="flex-grow px-4 flex flex-col gap-2 overflow-y-auto pb-6 custom-scrollbar ">
           {role === "Student" && (
             <>
               <NavLink to="/dashboard/student/my-tuitions" className={linkStyle}><FaBook size={18} /> My Tuitions</NavLink>

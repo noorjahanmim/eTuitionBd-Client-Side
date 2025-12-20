@@ -82,19 +82,6 @@ const AllTuitions = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tuitions.map((tuition) => (
           <TuitionCard key={tuition._id} tuition={tuition}></TuitionCard>
-          // <div key={tuition._id} className="border p-4 rounded-lg shadow hover:shadow-lg transition">
-          //   <h2 className="text-xl font-semibold mb-2">{tuition.subject}</h2>
-          //   <p>Class: {tuition.class}</p>
-          //   <p>Location: {tuition.location}</p>
-          //   <p>Budget: ${tuition.budget}</p>
-          
-          //   <Link
-          //     to={`/tuitions/${tuition._id}`} // matches router
-          //     className="mt-3 inline-block text-blue-600 hover:underline"
-          //   >
-          //     View Details
-          //   </Link>
-          // </div>
         ))}
       </div>
     </div>

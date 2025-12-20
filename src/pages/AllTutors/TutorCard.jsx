@@ -52,8 +52,8 @@ const TutorCard = ({tutor}) => {
                   <span>{tutor.location || "Dhaka, Bangladesh"}</span>
                 </div>
                  <Link
-          to={`/tutors/${tutor._id}`} // <-- route এ id পাঠাও
-          className="w-full block text-center py-4 rounded-2xl bg-primary text-primary-content font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:bg-primary/90 transition-all active:scale-95"
+          to={`/tutors/${tutor._id}`} // 
+          className="group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden w-full"
         >
           View Full Profile
         </Link>

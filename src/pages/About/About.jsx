@@ -231,7 +231,7 @@ const About = () => {
       {/* ✅ Post Tuition → Student Dashboard */}
       <Link
         to="/dashboard/student/post-tuition"
-        className="btn btn-primary px-10"
+        className="btn btn-primary px-10 bg-gradient-to-r from-primary via-indigo-500 to-primary border-none"
       >
         Post a Tuition
       </Link>

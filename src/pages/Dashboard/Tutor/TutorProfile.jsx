@@ -93,14 +93,14 @@ const TutorProfile = () => {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
+            {/* <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
               <button className="flex  gap-2btn btn-primary btn-lg hover:scale-105 active:scale-95 gap-2 group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden  ">
                 <MessageCircle size={20} /> Hire Tutor
               </button>
               <button className="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all active:scale-95 hover:scale-105">
                 Download CV
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </motion.div>

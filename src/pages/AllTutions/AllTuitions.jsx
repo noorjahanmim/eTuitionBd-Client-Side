@@ -9,7 +9,7 @@ const AllTuitions = () => {
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axiosSecure.get("/tuitions") // plural
+    axiosSecure.get("/tuitions") 
       .then((res) => {
         setTuitions(res.data);
         setLoading(false);

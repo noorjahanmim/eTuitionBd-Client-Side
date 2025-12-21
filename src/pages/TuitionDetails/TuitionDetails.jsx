@@ -148,7 +148,7 @@ const TuitionDetails = () => {
                   onClick={() => setShowModal(true)}
                   className="w-full py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all bg-gradient-to-r from-primary via-indigo-500 to-primary"
                 >
-                  APPLY TO JOB
+                  APPLY
                 </button>
               </div>
             </motion.div>

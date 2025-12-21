@@ -5,6 +5,10 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { User, Mail, Lock, Phone, UserCircle, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion"
+import { Toaster } from "react-hot-toast";
+
+
+
 
 
 const Register = () => {
@@ -49,20 +53,28 @@ const Register = () => {
 
       navigate("/");
     } catch (error) {
-      toast.error(error.message);
+      // toast.error(error.message);
+
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("This email is already registered. Please login instead.");
+      } else {
+        toast.error(error.message);
+      }
+
       console.log(error);
     }
   };
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <motion.div 
+      <Toaster />
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row"
       >
         {/* Left Side: Illustration or Text */}
-        <div className="md:w-1/2 bg-primary p-12 text-white flex flex-col justify-center items-center text-center">
+        <div className="md:w-1/2 bg-gradient-to-r from-primary via-indigo-500 to-primary p-12 text-white flex flex-col justify-center items-center text-center">
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
@@ -178,7 +190,7 @@ const Register = () => {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full shadow-lg group">
+            <button type="submit" className="btn btn-primary w-full bg-gradient-to-r from-primary via-indigo-500 to-primary hover:scale-105 border-none shadow-lg group">
               Register Now
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>

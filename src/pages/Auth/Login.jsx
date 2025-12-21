@@ -228,7 +228,7 @@ const Login = () => {
         className="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse"
       >
         {/* Left Side: Gradient Design */}
-        <div className="md:w-1/2 bg-gradient-to-br from-primary to-indigo-700 p-12 text-white flex flex-col justify-center items-center text-center">
+        <div className="md:w-1/2 bg-gradient-to-r from-primary via-indigo-500 to-primary p-12 text-white flex flex-col justify-center items-center text-center">
           <motion.div initial={{ y: -20 }} animate={{ y: 0 }} transition={{ type: "spring", stiffness: 100 }}>
             <LogIn size={80} className="mb-6 opacity-90" />
           </motion.div>
@@ -284,8 +284,8 @@ const Login = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full shadow-lg group text-white">
-              Sign In
+            <button type="submit" className="btn btn-primary w-full bg-gradient-to-r from-primary via-indigo-500 to-primary hover:scale-105 border-none shadow-lg group text-white">
+               Login
               <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
@@ -294,7 +294,7 @@ const Login = () => {
 
           <button
             onClick={handleGoogleLogin}
-            className="btn btn-outline w-full border-gray-300 hover:bg-gray-50 text-gray-700 font-bold gap-3 transition-all rounded-xl"
+            className="btn btn-outline w-full border-gray-300 hover:bg-gray-50 text-gray-700 font-bold gap-3 transition-all rounded-xl hover:scale-105"
           >
             <FcGoogle size={22} />
             Login with Google

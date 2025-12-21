@@ -5,18 +5,21 @@ import App from './App.jsx';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/router.jsx';
 import AuthProvider from './contexts/AuthContext/AuthProvider.jsx';
-
-// ✅ AOS Animation Import & Init
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Toaster } from 'react-hot-toast';
 AOS.init();
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
+    </QueryClientProvider>
     <Toaster />
   </StrictMode>
 );

@@ -45,9 +45,24 @@ const AuthProvider = ({ children }) => {
     };
 
     // Update profile
-    const updateUserProfile = (profile) => {
-        return updateProfile(auth.currentUser, profile);
-    };
+    // const updateUserProfile = (profile) => {
+    //     return updateProfile(auth.currentUser, profile);
+        
+    // };
+
+    const updateUserProfile = async (name, photoURL) => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    console.warn("No current user found for profile update");
+    return;
+  }
+
+  return updateProfile(currentUser, {
+    displayName: name,
+    photoURL: photoURL || "",
+  });
+};
+
 
     // Observe auth state
     useEffect(() => {

@@ -40,10 +40,10 @@ const MyTuitions = () => {
 
 
   useEffect(() => {
-    if (!user?.email) return;
+    if (!(user?.email || user?.providerData?.[0]?.email)) return;
 
     axiosSecure
-      .get(`/my-tuitions/${user.email}`)
+      .get(`/my-tuitions/${user?.email || user?.providerData?.[0]?.email}`)
       .then((res) => {
         setTuitions(res.data);
         setLoading(false);

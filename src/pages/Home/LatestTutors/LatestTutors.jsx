@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import { Star, MapPin, GraduationCap, CheckCircle2,ArrowRight } from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import TutorCard from "../../AllTutors/TutorCard";
-import { Link } from "react-router";
+// import { Link } from "react-router";
+import { Link } from "react-router-dom"; 
+
 
 
 const LatestTutors = () => {
@@ -55,7 +57,7 @@ const LatestTutors = () => {
         </div>
 
         <div className="flex justify-between items-center px-6 mb-10">
-        <h2 className="text-3xl font-bold">Latest Tuition Posts</h2>
+        <h2 className="text-3xl font-bold">Latest Tutors</h2>
         <Link
           to="/all-tutors"
           className="text-primary font-semibold hover:underline"

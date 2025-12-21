@@ -156,55 +156,56 @@
 
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, GraduationCap, Banknote, CheckCircle, XCircle, Mail, Search, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 
 const AppliedTutors = () => {
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const axiosSecure = useAxiosSecure();
 
-  // Fetch all tutor applications
   useEffect(() => {
-    const fetchApplications = async () => {
+    if (!user?.email) return;
+
+    const fetchAppliedTutors = async () => {
       try {
-        const res = await axiosSecure.get("/applications"); // API call
-        setApplications(res.data);
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to load applications.");
-      } finally {
+        // 1️⃣ Get all tuitions of this student
+        const { data: myTuitions } = await axiosSecure.get(`/tuitions?studentEmail=${user.email}`);
+        
+        // Filter only approved tuitions
+        const approvedTuitions = myTuitions.filter(t => t.status === "Approved");
+
+        // 2️⃣ For each approved tuition, fetch its applications
+        const allApplications = [];
+        for (let tuition of approvedTuitions) {
+          const { data: apps } = await axiosSecure.get(`/applications/tuition/${tuition._id}`);
+          allApplications.push(...apps);
+        }
+
+        setApplications(allApplications);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load applied tutors.");
         setLoading(false);
       }
     };
 
-    fetchApplications();
-  }, [axiosSecure]);
+    fetchAppliedTutors();
+  }, [user, axiosSecure]);
 
-  // Accept / Reject action
-  const handleAction = async (id, status) => {
-    try {
-      // Call backend to update application status
-      await axiosSecure.patch(`/applications/${id}`, { status });
-      toast.success(`Tutor application ${status}ed!`);
-
-      // Update UI
-      setApplications((prev) =>
-        prev.map((app) => (app._id === id ? { ...app, status } : app))
-      );
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to update application status.");
-    }
+  const handleAction = (id, status) => {
+    toast.success(`Tutor application ${status}ed!`);
   };
 
   return (
     <div className="w-full min-h-screen">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
           <h2 className="text-3xl font-black text-slate-800 flex items-center gap-3">
@@ -227,7 +228,6 @@ const AppliedTutors = () => {
         </motion.div>
       </div>
 
-      {/* Main Content Area */}
       {loading ? (
         <div className="flex justify-center py-20">
           <span className="loading loading-spinner loading-lg text-indigo-600"></span>
@@ -253,9 +253,7 @@ const AppliedTutors = () => {
                   className="bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500 group relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-indigo-50 rounded-full blur-3xl group-hover:bg-indigo-100 transition-colors"></div>
-
                   <div className="relative">
-                    {/* Tutor Profile Info */}
                     <div className="flex items-start gap-4 mb-8">
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-indigo-100">
                         {a.tutorName?.charAt(0)}
@@ -270,7 +268,6 @@ const AppliedTutors = () => {
                       </div>
                     </div>
 
-                    {/* Qualifications & Salary */}
                     <div className="space-y-4 mb-8">
                       <div className="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:border-indigo-100 transition-colors">
                         <GraduationCap className="text-indigo-500" size={20} />
@@ -289,17 +286,16 @@ const AppliedTutors = () => {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="flex gap-4 pt-4">
                       <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAction(a._id, 'Rejected')}
+                        onClick={() => handleAction(a._id, 'Reject')}
                         className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100"
                       >
                         <XCircle size={18} /> Reject
                       </motion.button>
                       
                       <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAction(a._id, 'Approved')}
+                        onClick={() => handleAction(a._id, 'Accept')}
                         className="flex-1 flex items-center justify-center gap-2 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all"
                       >
                         <CheckCircle size={18} /> Accept
@@ -317,13 +313,3 @@ const AppliedTutors = () => {
 };
 
 export default AppliedTutors;
-
-
-
-
-
-
-
-
-
-

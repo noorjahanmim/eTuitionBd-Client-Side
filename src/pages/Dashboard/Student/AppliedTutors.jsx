@@ -1,58 +1,101 @@
-// import React, { useState, useEffect } from "react";
+// import React, { useEffect, useState } from "react";
 // import { motion, AnimatePresence } from "framer-motion";
-// import { Users, GraduationCap, Banknote, CheckCircle, XCircle, Mail, Search, Sparkles } from "lucide-react";
+// import { CheckCircle, XCircle } from "lucide-react";
 // import toast from "react-hot-toast";
+// import Swal from "sweetalert2";
+// import useAxiosSecure from "../../../hooks/useAxiosSecure";
+// import useAuth from "../../../hooks/useAuth";
+// ;
 
 // const AppliedTutors = () => {
 //   const [applications, setApplications] = useState([]);
 //   const [loading, setLoading] = useState(true);
+//   const axiosSecure = useAxiosSecure();
+//   const { user } = useAuth();
 
 //   useEffect(() => {
-//     // API Call logic (placeholder)
-//     // fetch(`https://etuitionbd-server-side.vercel.app/applications`)
-//     //   .then(res => res.json())
-//     //   .then(data => { setApplications(data); setLoading(false); })
-//     //   .catch(() => setLoading(false));
-    
-//     setLoading(false);
-//   }, []);
+//     if (!user?.email) return;
 
-//   const handleAction = (id, status) => {
-//     toast.success(`Tutor application ${status}ed!`);
+//     const fetchApplications = async () => {
+//       try {
+//         const res = await axiosSecure.get(`/applications/student/${user.email}`);
+//         setApplications(res.data);
+//       } catch (err) {
+//         console.error("Fetch error:", err);
+//         toast.error("Failed to load applications.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
+//     fetchApplications();
+//   }, [axiosSecure, user?.email]);
+
+//   // Reject handler
+//   const handleReject = async (applicationId) => {
+//     const result = await Swal.fire({
+//       title: "Are you sure?",
+//       text: "Do you really want to reject this tutor application?",
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonColor: "#d33",
+//       cancelButtonColor: "#3085d6",
+//       confirmButtonText: "Yes, Reject",
+//       cancelButtonText: "Cancel"
+//     });
+
+//     if (result.isConfirmed) {
+//       try {
+//         const res = await axiosSecure.patch(`/applications/${applicationId}`, { status: "Rejected" });
+//         if (res.data.modifiedCount > 0) {
+//           Swal.fire("Rejected!", "Tutor application has been rejected.", "success");
+//           setApplications((prev) =>
+//             prev.map((app) =>
+//               app._id === applicationId ? { ...app, status: "Rejected" } : app
+//             )
+//           );
+//         }
+//       } catch (err) {
+//         console.error(err);
+//         toast.error("Failed to reject application.");
+//       }
+//     }
+//   };
+
+//   // Approve handler → Stripe checkout
+//   const handleApprove = async (application) => {
+//     try {
+//       const paymentInfo = {
+//         applicationId: application._id,
+//         expectedSalary: application.expectedSalary,
+//         tutorEmail: application.tutorEmail,
+//         tutorName: application.tutorName,
+//         subject: application.tuitionInfo?.subject,
+//         tuitionClass: application.tuitionInfo?.class,
+//         tuitionId: application.tuitionInfo?._id,
+//         studentEmail: user?.email
+//       };
+
+//       if (!paymentInfo.subject || !paymentInfo.tuitionClass || !paymentInfo.tuitionId) {
+//         return Swal.fire("Error", "Tuition info missing in application", "error");
+//       }
+
+//       const res = await axiosSecure.post("/payment-checkout-session", paymentInfo);
+//       if (!res.data?.url) {
+//         return Swal.fire("Error", "No payment URL received", "error");
+//       }
+
+//       window.location.assign(res.data.url);
+//     } catch (err) {
+//       console.error(err);
+//       Swal.fire("Error", "Failed to start payment", "error");
+//     }
 //   };
 
 //   return (
 //     <div className="w-full min-h-screen">
-//       {/* Header Section */}
-//       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-//         <motion.div 
-//           initial={{ opacity: 0, x: -20 }} 
-//           animate={{ opacity: 1, x: 0 }}
-//         >
-//           <h2 className="text-3xl font-black text-slate-800 flex items-center gap-3">
-//             <span className="p-3 bg-indigo-100 text-indigo-600 rounded-2xl">
-//               <Users size={28} />
-//             </span>
-//             Applied Tutors
-//           </h2>
-//           <p className="text-slate-500 mt-2 flex items-center gap-2 font-medium pl-1">
-//             <Sparkles size={16} className="text-amber-500" /> 
-//             Review and select the best tutor for your needs
-//           </p>
-//         </motion.div>
+//       <h2 className="text-3xl font-black text-slate-800 mb-6">Applied Tutors</h2>
 
-//         <motion.div 
-//           initial={{ opacity: 0, scale: 0.9 }} 
-//           animate={{ opacity: 1, scale: 1 }}
-//           className="bg-white px-6 py-3 rounded-2xl border border-indigo-100 shadow-sm"
-//         >
-//           <span className="text-sm font-bold text-slate-400 uppercase tracking-widest block leading-none mb-1">Total Applications</span>
-//           <span className="text-2xl font-black text-indigo-600">{applications.length}</span>
-//         </motion.div>
-//       </div>
-
-//       {/* Main Content Area */}
 //       {loading ? (
 //         <div className="flex justify-center py-20">
 //           <span className="loading loading-spinner loading-lg text-indigo-600"></span>
@@ -60,90 +103,76 @@
 //       ) : (
 //         <AnimatePresence>
 //           {applications.length === 0 ? (
-//             <motion.div 
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               className="bg-white border-2 border-dashed border-slate-200 rounded-[3rem] py-24 text-center"
-//             >
-//               <div className="bg-slate-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
-//                 <Search size={44} />
-//               </div>
-//               <h3 className="text-2xl font-bold text-slate-700 mb-2">No Applications Yet</h3>
-//               <p className="text-slate-500 max-w-xs mx-auto font-medium">
-//                 Wait a bit! Tutors will start applying to your posts soon.
-//               </p>
-//             </motion.div>
+//             <div className="text-center py-20 text-slate-500 font-medium">
+//               No Applications Yet
+//             </div>
 //           ) : (
-//             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
-//               {applications.map((a, index) => (
-//                 <motion.div
-//                   key={a._id}
-//                   initial={{ opacity: 0, y: 30 }}
-//                   animate={{ opacity: 1, y: 0 }}
-//                   transition={{ delay: index * 0.1 }}
-//                   className="bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500 group relative overflow-hidden"
-//                 >
-//                   {/* Background Decoration */}
-//                   <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-indigo-50 rounded-full blur-3xl group-hover:bg-indigo-100 transition-colors"></div>
+//             <div className="overflow-x-auto">
+//               <table className="table table-zebra w-full">
+//                 <thead>
+//                   <tr className="text-slate-700">
+//                     <th>Tutor Info</th>
+//                     <th>Tuition Info</th>
+//                     <th>Expected Salary</th>
+//                     <th>Status</th>
+//                     <th>Actions</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {applications.map((a, index) => (
+//                     <motion.tr
+//                       key={a._id}
+//                       initial={{ opacity: 0, y: 10 }}
+//                       animate={{ opacity: 1, y: 0 }}
+//                       transition={{ delay: index * 0.05 }}
+//                     >
+//                       <td>
+//                         <p className="font-bold">{a.tutorName}</p>
+//                         <p className="text-xs text-slate-500">{a.tutorEmail}</p>
+//                       </td>
+//                       <td>
+//                         <p className="font-semibold">{a.tuitionInfo?.subject}</p>
+//                         <p className="text-xs text-slate-500">Class {a.tuitionInfo?.class}</p>
+//                       </td>
+//                       <td className="font-black text-indigo-600">৳ {a.expectedSalary}</td>
+//                       <td>
+//                         <span className={`badge ${
+//                           a.status === "Approved" ? "badge-success" :
+//                           a.status === "Rejected" ? "badge-error" :
+//                           "badge-warning"
+//                         }`}>
+//                           {a.status || "Pending"}
+//                         </span>
+//                       </td>
+//                       <td className="flex gap-2">
+//                         <button
+//                           onClick={() => handleReject(a._id)}
+//                           disabled={a.status === "Approved" || a.status === "Rejected"}
+//                           className={`btn btn-xs flex items-center gap-1 ${
+//                             a.status === "Rejected" || a.status === "Approved"
+//                               ? "btn-disabled"
+//                               : "btn-outline btn-error"
+//                           }`}
+//                         >
+//                           <XCircle size={14} /> Reject
+//                         </button>
 
-//                   <div className="relative">
-//                     {/* Tutor Profile Info */}
-//                     <div className="flex items-start gap-4 mb-8">
-//                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-indigo-100">
-//                         {a.tutorName?.charAt(0)}
-//                       </div>
-//                       <div className="flex-1">
-//                         <h3 className="text-xl font-black text-slate-800 group-hover:text-indigo-600 transition-colors">
-//                           {a.tutorName}
-//                         </h3>
-//                         <p className="text-slate-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 mt-1">
-//                            <Mail size={12} className="text-indigo-400" /> {a.tutorEmail || "email@example.com"}
-//                         </p>
-//                       </div>
-//                     </div>
-
-//                     {/* Qualifications */}
-//                     <div className="space-y-4 mb-8">
-//                       <div className="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:border-indigo-100 transition-colors">
-//                         <GraduationCap className="text-indigo-500" size={20} />
-//                         <div>
-//                           <p className="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Qualifications</p>
-//                           <p className="text-sm font-bold text-slate-700">{a.qualifications}</p>
-//                         </div>
-//                       </div>
-
-//                       <div className="flex items-center gap-3 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50">
-//                         <Banknote className="text-emerald-500" size={20} />
-//                         <div>
-//                           <p className="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Expected Salary</p>
-//                           <p className="text-lg font-black text-indigo-600">৳ {a.salary}</p>
-//                         </div>
-//                       </div>
-//                     </div>
-
-//                     {/* Action Buttons */}
-//                     <div className="flex gap-4 pt-4">
-//                       <motion.button
-//                         whileHover={{ scale: 1.05 }}
-//                         whileTap={{ scale: 0.95 }}
-//                         onClick={() => handleAction(a._id, 'Reject')}
-//                         className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100"
-//                       >
-//                         <XCircle size={18} /> Reject
-//                       </motion.button>
-                      
-//                       <motion.button
-//                         whileHover={{ scale: 1.05 }}
-//                         whileTap={{ scale: 0.95 }}
-//                         onClick={() => handleAction(a._id, 'Accept')}
-//                         className="flex-1 flex items-center justify-center gap-2 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all"
-//                       >
-//                         <CheckCircle size={18} /> Accept
-//                       </motion.button>
-//                     </div>
-//                   </div>
-//                 </motion.div>
-//               ))}
+//                         <button
+//                           onClick={() => handleApprove(a)}
+//                           disabled={a.status === "Approved" || a.status === "Rejected"}
+//                           className={`btn btn-xs flex items-center gap-1 ${
+//                             a.status === "Rejected" || a.status === "Approved"
+//                               ? "btn-disabled"
+//                               : "btn-primary"
+//                           }`}
+//                         >
+//                           <CheckCircle size={14} /> Accept
+//                         </button>
+//                       </td>
+//                     </motion.tr>
+//                   ))}
+//                 </tbody>
+//               </table>
 //             </div>
 //           )}
 //         </AnimatePresence>
@@ -154,28 +183,29 @@
 
 // export default AppliedTutors;
 
-
-
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Users, GraduationCap, Banknote, CheckCircle, XCircle, Mail, Search, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { Check, X } from "lucide-react";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 
-const AppliedTutors = () => {
+  const AppliedTutors = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const axiosSecure = useAxiosSecure();
 
-  // Fetch all tutor applications
   useEffect(() => {
+    if (!user?.email) return;
+
     const fetchApplications = async () => {
       try {
-        const res = await axiosSecure.get("/applications"); 
+        const res = await axiosSecure.get(`/my-applications/student/${user.email}`);
         setApplications(res.data);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch applications:", err);
         toast.error("Failed to load applications.");
       } finally {
         setLoading(false);
@@ -183,163 +213,100 @@ const AppliedTutors = () => {
     };
 
     fetchApplications();
-  }, [axiosSecure]);
+  }, [user?.email, axiosSecure]);
 
-  // Accept / Reject action
-  // const handleAction = async (id, status) => {
-  //   try {
-  //     // Call backend to update application status
-  //     await axiosSecure.patch(`/applications/${id}`, { status });
-  //     toast.success(`Tutor application ${status}ed!`);
+  const handleStatusUpdate = async (id, newStatus) => {
+    try {
+      await axiosSecure.put(`/applications/${id}`, { status: newStatus });
+      setApplications((prev) =>
+        prev.map((app) =>
+          app._id === id ? { ...app, status: newStatus } : app
+        )
+      );
+      toast.success(`Application ${newStatus}`);
+    } catch (err) {
+      console.error("Status update failed:", err);
+      toast.error("Failed to update status.");
+    }
+  };
 
-  //     // Update UI
-  //     setApplications((prev) =>
-  //       prev.map((app) => (app._id === id ? { ...app, status } : app))
-  //     );
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Failed to update application status.");
-  //   }
-  // };
-
-
-  const handleAction = async (id, status) => {
-  try {
-    await axiosSecure.patch(`/applications/${id}`, { status });
-    toast.success(`Tutor application ${status}ed!`);
-
-    setApplications((prev) =>
-      prev.map((app) => (app._id === id ? { ...app, status } : app))
+  if (loading) {
+    return (
+      <div className="flex justify-center py-20">
+        <span className="loading loading-spinner loading-lg text-indigo-600"></span>
+      </div>
     );
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to update application status.");
   }
-};
 
+  if (applications.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <h3 className="text-2xl font-bold text-slate-700 mb-2">
+          No Applications Found
+        </h3>
+        <p className="text-slate-500">
+          You have not received any applications yet.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full min-h-screen">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-          <h2 className="text-3xl font-black text-slate-800 flex items-center gap-3">
-            <span className="p-3 bg-indigo-100 text-indigo-600 rounded-2xl">
-              <Users size={28} />
-            </span>
-            Applied Tutors
-          </h2>
-          <p className="text-slate-500 mt-2 flex items-center gap-2 font-medium pl-1">
-            <Sparkles size={16} className="text-amber-500" /> 
-            Review and select the best tutor for your needs
-          </p>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-          className="bg-white px-6 py-3 rounded-2xl border border-indigo-100 shadow-sm"
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {applications.map((app) => (
+        <motion.div
+          key={app._id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white border border-slate-100 rounded-2xl p-6 shadow hover:shadow-lg transition-all"
         >
-          <span className="text-sm font-bold text-slate-400 uppercase tracking-widest block leading-none mb-1">Total Applications</span>
-          <span className="text-2xl font-black text-indigo-600">{applications.length}</span>
-        </motion.div>
-      </div>
-
-      {/* Main Content Area */}
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <span className="loading loading-spinner loading-lg text-indigo-600"></span>
-        </div>
-      ) : (
-        <AnimatePresence>
-          {applications.length === 0 ? (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="bg-white border-2 border-dashed border-slate-200 rounded-[3rem] py-24 text-center"
+          <h3 className="text-xl font-bold text-slate-800 mb-2">
+            {app.tutorName}
+          </h3>
+          <p className="text-sm text-slate-500 mb-4">
+            Applied on: {new Date(app.appliedAt || app.createdAt).toLocaleDateString()}
+          </p>
+          <p className="text-slate-700 mb-4">
+            <span className="font-bold">Subject:</span> {app.subject}
+          </p>
+          <p className="text-slate-700 mb-4">
+            <span className="font-bold">Message:</span> {app.message || "N/A"}
+          </p>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="font-bold text-sm">Status:</span>
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-bold uppercase ${
+                app.status === "approved"
+                  ? "bg-emerald-100 text-emerald-600"
+                  : app.status === "rejected"
+                  ? "bg-rose-100 text-rose-600"
+                  : "bg-yellow-100 text-yellow-600"
+              }`}
             >
-              <div className="bg-slate-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
-                <Search size={44} />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-700 mb-2">No Applications Yet</h3>
-              <p className="text-slate-500 max-w-xs mx-auto font-medium">
-                Wait a bit! Tutors will start applying to your posts soon.
-              </p>
-            </motion.div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
-              {applications.map((a, index) => (
-                <motion.div key={a._id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}
-                  className="bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500 group relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-indigo-50 rounded-full blur-3xl group-hover:bg-indigo-100 transition-colors"></div>
+              {app.status || "Pending"}
+            </span>
+          </div>
 
-                  <div className="relative">
-                    {/* Tutor Profile Info */}
-                    <div className="flex items-start gap-4 mb-8">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-indigo-100">
-                        {a.tutorName?.charAt(0)}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-black text-slate-800 group-hover:text-indigo-600 transition-colors">
-                          {a.tutorName}
-                        </h3>
-                        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 mt-1">
-                           <Mail size={12} className="text-indigo-400" /> {a.tutorEmail || "email@example.com"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Qualifications & Salary */}
-                    <div className="space-y-4 mb-8">
-                      <div className="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:border-indigo-100 transition-colors">
-                        <GraduationCap className="text-indigo-500" size={20} />
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Qualifications</p>
-                          <p className="text-sm font-bold text-slate-700">{a.qualifications}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50">
-                        <Banknote className="text-emerald-500" size={20} />
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Expected Salary</p>
-                          <p className="text-lg font-black text-indigo-600">৳ {a.salary}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-4 pt-4">
-                      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAction(a._id, 'Rejected')}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100"
-                      >
-                        <XCircle size={18} /> Reject
-                      </motion.button>
-                      
-                      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAction(a._id, 'Approved')}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all"
-                      >
-                        <CheckCircle size={18} /> Accept
-                      </motion.button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </AnimatePresence>
-      )}
+          <div className="flex gap-3">
+            <button
+              onClick={() => handleStatusUpdate(app._id, "approved")}
+              disabled={app.status === "approved"}
+              className="flex-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 py-2 rounded-lg flex items-center justify-center gap-2 font-bold text-sm disabled:opacity-50"
+            >
+              <Check size={16} /> Approve
+            </button>
+            <button
+              onClick={() => handleStatusUpdate(app._id, "rejected")}
+              disabled={app.status === "rejected"}
+              className="flex-1 bg-rose-50 text-rose-600 hover:bg-rose-100 py-2 rounded-lg flex items-center justify-center gap-2 font-bold text-sm disabled:opacity-50"
+            >
+              <X size={16} /> Reject
+            </button>
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 };
 
 export default AppliedTutors;
-
-
-
-
-
-
-
-
-
-

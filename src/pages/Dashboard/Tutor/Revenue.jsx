@@ -1,5 +1,5 @@
 const Revenue = () => {
-  const revenues = []; // fetch from API
+  const revenues = [];
 
   return (
     <div>

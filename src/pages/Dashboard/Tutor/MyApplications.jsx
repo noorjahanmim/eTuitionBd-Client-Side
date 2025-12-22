@@ -1,229 +1,308 @@
-// const MyApplications = () => {
-//   const applications = []; // fetch from API
-
-//   return (
-//     <div>
-//       <h2 className="text-2xl font-bold mb-6">📋 My Applications</h2>
-//       {applications.length === 0 ? (
-//         <p className="text-gray-500">You haven’t applied to any tuitions yet.</p>
-//       ) : (
-//         <div className="grid gap-4">
-//           {applications.map((app) => (
-//             <div key={app._id} className="p-4 border rounded-lg shadow hover:shadow-md">
-//               <h3 className="font-semibold text-lg">{app.subject}</h3>
-//               <p>Class: {app.class}</p>
-//               <p>Status: <span className="font-bold">{app.status}</span></p>
-//               <div className="flex gap-3 mt-2">
-//                 <button className="btn btn-sm btn-warning">Update</button>
-//                 <button className="btn btn-sm btn-error">Delete</button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-// export default MyApplications;
-
-
-
-// import { useEffect, useState } from "react";
-// import useAxiosSecure from "../../../hooks/useAxiosSecure";
-// import useAuth from "../../../hooks/useAuth";
-
-
-// const MyApplications = () => {
-//   const [applications, setApplications] = useState([]);
-//   const axiosSecure = useAxiosSecure();
-//   const { user } = useAuth();
-
-//   useEffect(() => {
-//     if (user?.email) {
-//       axiosSecure.get(`/applications/tutor/${user.email}`)
-//         .then(res => setApplications(res.data))
-//         .catch(err => console.error("Error fetching applications:", err));
-//     }
-//   }, [user, axiosSecure]);
-
-//   return (
-//     <div>
-//       <h2 className="text-2xl font-bold mb-6">📋 My Applications</h2>
-//       {applications.length === 0 ? (
-//         <p className="text-gray-500">You haven’t applied to any tuitions yet.</p>
-//       ) : (
-//         <div className="grid gap-4">
-//           {applications.map((app) => (
-//             <div key={app._id} className="p-4 border rounded-lg shadow hover:shadow-md">
-//               <h3 className="font-semibold text-lg">
-//                 {app.tuition?.subject || "Unknown Subject"}
-//               </h3>
-//               <p>Class: {app.tuition?.class || "N/A"}</p>
-//               <p>Status: <span className="font-bold">{app.status}</span></p>
-//               <div className="flex gap-3 mt-2">
-//                 <button className="btn btn-sm btn-warning">Update</button>
-//                 <button className="btn btn-sm btn-error">Delete</button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default MyApplications;
-
-
-
-import { useEffect, useState } from "react";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import useAuth from "../../../hooks/useAuth";
+import React, { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+import { FaBan, FaCheckCircle, FaEdit, FaHourglassHalf, FaLock, FaTimesCircle, FaTrash } from "react-icons/fa";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Loading from "../../../components/Loading/Loading";
 
 const MyApplications = () => {
-  const [applications, setApplications] = useState([]);
-  const [editingApp, setEditingApp] = useState(null);
-  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [selectedApp, setSelectedApp] = useState(null);
+  const UpdateModalRef = useRef(null);
+  const email = user?.email || user?.providerData?.[0]?.email
 
-  const fetchApplications = () => {
-    axiosSecure
-      .get(`/applications/tutor/${user.email}`)
-      .then((res) => setApplications(res.data))
-      .catch((err) => console.error("Error fetching applications:", err));
+  const { data: myApplications = [], isLoading, refetch } = useQuery({
+  queryKey: ["my-applications", email],
+  queryFn: async () => {
+    const res = await axiosSecure.get(`/my-applications/tutor/${email}`);
+    return res.data;
+  },
+  enabled: !!email
+});
+
+
+  const handleUpdateSubmit = async (e, app) => {
+  e.preventDefault();
+  const form = e.target;
+
+  const updatedData = {
+    qualifications: form.qualifications.value,
+    experience: form.experience.value,
+    expectedSalary: form.salary.value,
+    contact: form.contact.value,
   };
 
-  useEffect(() => {
-    if (user?.email) fetchApplications();
-  }, [user, axiosSecure]);
-
-  // 🔥 DELETE
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You can't undo this action!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/applications/${id}`);
-        if (res.data.deletedCount > 0) {
-          Swal.fire("Deleted!", "Application removed.", "success");
-          fetchApplications();
-        }
-      }
-    });
-  };
-
-  // 🔥 UPDATE SUBMIT
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const status = form.status.value;
-
-    const res = await axiosSecure.patch(`/applications/${editingApp._id}`, {
-      status,
-    });
-
-    if (res.data.modifiedCount > 0) {
-      Swal.fire("Updated!", "Application updated successfully", "success");
-      setEditingApp(null);
-      fetchApplications();
+  try {
+    const res = await axiosSecure.patch(`/applications/${app._id}`, updatedData);
+    if (res.data.success) {
+      toast.success(res.data.message);
+      refetch();
+      UpdateModalRef.current.close();
+    } else {
+      toast.error(res.data.message || "Update failed");
     }
-  };
+  } catch (err) {
+    toast.error("Update failed");
+    console.error(err);
+  }
+};
+
+
+const handleDelete = async (appId) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const res = await axiosSecure.delete(`/applications/${appId}`);
+      if (res.data.deletedCount > 0) {
+        Swal.fire("Deleted!", "Application removed successfully.", "success");
+        refetch();
+      }
+    }
+  });
+};
+
+
+  if (isLoading) return <Loading />;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">
-        📋 My Applications ({applications.length})
-      </h2>
+    <div className="px-6 md:px-10 py-6 md:py-10">
+      <h2 className="text-2xl font-bold text-indigo-600 mb-4">My Applications ({myApplications.length})</h2>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tuition Info</th>
+              <th>Student Info</th>
+              <th>Qualifications</th>
+              <th>Experience</th>
+              <th>Expected Salary</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+  {myApplications.map((app, index) => (
+    <tr key={app._id}>
+      <td>{index + 1}</td>
 
-      {applications.length === 0 ? (
-        <p className="text-gray-500">
-          You haven’t applied to any tuitions yet.
-        </p>
-      ) : (
-        <div className="grid gap-4">
-          {applications.map((app) => (
-            <div
-              key={app._id}
-              className="p-4 border rounded-lg shadow hover:shadow-md"
-            >
-              <h3 className="font-semibold text-lg">
-                {app.tuition?.subject || "Unknown Subject"}
-              </h3>
-              <p>Class: {app.tuition?.class || "N/A"}</p>
+      {/* Tuition Info */}
+      <td>
+        <span className="font-semibold">{app.subject}</span><br />
+        <span>{app.class}</span>
+      </td>
 
-              <p>
-                Status:
-                <span className="font-bold ml-1 capitalize">
-                  {app.status}
-                </span>
-              </p>
+      {/* Student Info */}
+      <td>
+        <span className="font-semibold">{app.student?.name}</span><br />
+        <span>{app.student?.email}</span>
+      </td>
 
-              <div className="flex gap-3 mt-2">
-                <button
-                  onClick={() => setEditingApp(app)}
-                  className="btn btn-sm btn-warning"
-                >
-                  Update
-                </button>
+      <td>{app.qualifications}</td>
+      <td>{app.experience}</td>
+      <td>{app.expectedSalary} Tk/Month</td>
 
-                <button
-                  onClick={() => handleDelete(app._id)}
-                  className="btn btn-sm btn-error"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Status */}
+      <td>
+        {app.status === "Approved" ? (
+          <span className="inline-flex items-center gap-1 bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
+            <FaCheckCircle className="text-green-500" /> Approved
+          </span>
+        ) : app.status === "Rejected" ? (
+          <span className="inline-flex items-center gap-1 bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
+            <FaTimesCircle className="text-red-500" /> Rejected
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm font-medium">
+            <FaHourglassHalf className="text-yellow-500" /> Pending
+          </span>
+        )}
+      </td>
 
-      {/* 🔥 Update Modal */}
-      {editingApp && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl w-[420px]">
-            <h3 className="text-xl font-bold mb-4">Update Application</h3>
-
-            <form onSubmit={handleUpdate} className="space-y-3">
-              <select
-                name="status"
-                defaultValue={editingApp.status}
-                className="select select-bordered w-full"
+      {/* Actions */}
+      <td className="align-middle">
+        <div className="flex gap-2">
+          {app.status === "Approved" ? (
+            <span className="bg-green-100 text-green-600 px-4 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+              <FaLock /> Locked
+            </span>
+          ) : app.status === "Rejected" ? (
+            <span className="bg-red-100 text-red-600 px-4 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+              <FaBan className="text-red-500" /> Declined
+            </span>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setSelectedApp(app);
+                  UpdateModalRef.current.showModal();
+                }}
+                className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700 flex items-center gap-2 shadow-md"
               >
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-
-              <div className="flex justify-end gap-2 mt-4">
-                <button
-                  type="button"
-                  onClick={() => setEditingApp(null)}
-                  className="px-4 py-2 bg-slate-200 rounded-lg"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
+                <FaEdit /> Update
+              </button>
+              <button
+                onClick={() => handleDelete(app._id)}
+                className="btn btn-sm bg-indigo-100 text-gray-800 hover:bg-indigo-200 flex items-center gap-2 shadow-md"
+              >
+                <FaTrash /> Delete
+              </button>
+            </>
+          )}
         </div>
-      )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+        </table>
+      </div>
+
+
+      {/* Update Modal */}
+<dialog ref={UpdateModalRef} className="modal modal-bottom sm:modal-middle">
+  <div className="modal-box bg-white">
+    <h3 className="font-bold text-[1.5rem] text-center">Update Application</h3>
+    {selectedApp && (
+      // <form
+      //   onSubmit={async (e) => {
+      //     e.preventDefault();
+      //     // Patch API call
+      //     const updatedData = {
+      //       qualifications: e.target.qualifications.value,
+      //       experience: e.target.experience.value,
+      //       expectedSalary: e.target.salary.value,
+      //       contact: e.target.contact.value,
+      //     };
+      //     const res = await axiosSecure.patch(`/applications/${selectedApp._id}`, updatedData);
+      //     if (res.data.modifiedCount > 0) {
+      //       refetch();
+      //       UpdateModalRef.current.close();
+      //       toast.success("Application updated successfully!");
+      //     } else {
+      //       toast.error("Update failed!");
+      //     }
+      //   }}
+      //   className="space-y-3 mt-4"
+      // >
+      //   <label className="label">Qualifications</label>
+      //   <input
+      //     name="qualifications"
+      //     type="text"
+      //     defaultValue={selectedApp.qualifications || ""}
+      //     className="input w-full"
+      //     required
+      //   />
+
+      //   <label className="label">Experience</label>
+      //   <input
+      //     name="experience"
+      //     type="text"
+      //     defaultValue={selectedApp.experience || ""}
+      //     className="input w-full"
+      //     required
+      //   />
+
+      //   <label className="label">Expected Salary</label>
+      //   <input
+      //     name="salary"
+      //     type="number"
+      //     defaultValue={selectedApp.expectedSalary || ""}
+      //     className="input w-full"
+      //     required
+      //   />
+
+      //   <label className="label">Contact Number</label>
+      //   <input
+      //     name="contact"
+      //     type="text"
+      //     defaultValue={selectedApp.contact || ""}
+      //     className="input w-full"
+      //     required
+      //   />
+
+      //   <button
+      //     type="submit"
+      //     className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold shadow-md mt-3"
+      //   >
+      //     Update Application
+      //   </button>
+      // </form>
+      <form onSubmit={(e) => handleUpdateSubmit(e, selectedApp)} className="space-y-3 mt-4">
+  <label className="label">Qualifications</label>
+  <input
+    name="qualifications"
+    type="text"
+    defaultValue={selectedApp?.qualifications || ""}
+    className="input w-full"
+    required
+  />
+
+  <label className="label">Experience</label>
+  <input
+    name="experience"
+    type="text"
+    defaultValue={selectedApp?.experience || ""}
+    className="input w-full"
+    required
+  />
+
+  <label className="label">Expected Salary</label>
+  <input
+    name="salary"
+    type="number"
+    defaultValue={selectedApp?.expectedSalary || ""}
+    className="input w-full"
+    required
+  />
+
+  <label className="label">Contact Number</label>
+  <input
+    name="contact"
+    type="text"
+    defaultValue={selectedApp?.contact || ""}
+    className="input w-full"
+    required
+  />
+
+  <button
+    type="submit"
+    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold shadow-md mt-3"
+  >
+    Update Application
+  </button>
+</form>
+
+    )}
+    <div className="modal-action">
+      <form method="dialog" className="w-full">
+        <button className="w-full bg-indigo-100 text-gray-800 py-2 rounded-lg hover:bg-indigo-200 transition duration-300 font-semibold shadow-md">
+          Cancel
+        </button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
     </div>
   );
 };
 
 export default MyApplications;
+
+
+
+
+
+
+

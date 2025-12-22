@@ -6,7 +6,7 @@
 //   const [tuitions, setTuitions] = useState([]);
 
 //   useEffect(() => {
-//     fetch("https://etuitionbd-server-side.vercel.app/tuitions?limit=6")
+//     fetch("http://localhost:3000/tuitions?limit=6")
 //       .then(res => res.json())
 //       .then(data => setTuitions(Array.isArray(data) ? data : data?.tuitions || []))
 //       .catch(err => console.error(err));

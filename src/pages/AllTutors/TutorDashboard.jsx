@@ -7,17 +7,17 @@ const TutorDashboard = ({ tutorEmail }) => {
 
   useEffect(() => {
     // My Applications
-    fetch(`https://etuitionbd-server-side.vercel.app/applications/tutor/${tutorEmail}`)
+    fetch(`http://localhost:3000/applications/tutor/${tutorEmail}`)
       .then(res => res.json())
       .then(data => setApplications(data));
 
     // Ongoing Tuitions
-    fetch(`https://etuitionbd-server-side.vercel.app/tutor/ongoing/${tutorEmail}`)
+    fetch(`http://localhost:3000/tutor/ongoing/${tutorEmail}`)
       .then(res => res.json())
       .then(data => setOngoing(data));
 
     // Revenue History
-    fetch(`https://etuitionbd-server-side.vercel.app/payments/tutor/${tutorEmail}`)
+    fetch(`http://localhost:3000/payments/tutor/${tutorEmail}`)
       .then(res => res.json())
       .then(data => setRevenue(data));
   }, [tutorEmail]);

@@ -44,11 +44,7 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     };
 
-    // Update profile
-    // const updateUserProfile = (profile) => {
-    //     return updateProfile(auth.currentUser, profile);
-        
-    // };
+ 
 
     const updateUserProfile = async (name, photoURL) => {
   const currentUser = auth.currentUser;

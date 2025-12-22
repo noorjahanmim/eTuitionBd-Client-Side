@@ -16,27 +16,6 @@ const RootLayout = () => {
     </div>
 
 
-
-
-//     <div className='bg-b    lue-500'>
-//  <Navbar />
-//       <Outlet />
-//       <Footer />
-
-
-//     </div>
-    // <div className="flex flex-col min-h-screen font-sans">
-     
-      
-
-    //   {/* <main className="flex-grow">
-    //     <div className="container mx-auto px-4">
-    //       <Outlet />
-    //     </div>
-    //   </main> */}
-
-      
-    // </div>
   );
 };
 

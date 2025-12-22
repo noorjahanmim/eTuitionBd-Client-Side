@@ -28,6 +28,7 @@ import TutorProfile from "../pages/Dashboard/Tutor/TutorProfile";
 import Users from "../pages/Dashboard/Admin/Users";
 import Tuitions from "../pages/Dashboard/Admin/Tuitions";
 import Reports from "../pages/Dashboard/Admin/Reports";
+import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: <DashboardLayout />,
         children: [
+          {
+            path: 'student/payment-success',
+            Component: PaymentSuccess
+          },
           // Student
           { path: "student/my-tuitions", element: <MyTuitions /> },
           { path: "student/post-tuition", element: <PostTuition /> },
@@ -108,47 +113,3 @@ export const router = createBrowserRouter([
       
       
 ]);
-
-
-
-
-    // {
-    //     path: "dashboard",
-    //     element: <DashboardLayout />,
-    //     children: [
-    //       // Student
-    //       { path: "student/my-tuitions", element: <MyTuitions /> },
-    //       { path: "student/post-tuition", element: <PostTuition /> },
-    //       { path: "student/applied-tutors", element: <AppliedTutors /> },
-    //       { path: "student/payments", element: <Payments /> },
-    //       { path: "student/profile", element: <ProfileSettings /> },
-
-    //       // Tutor
-    //       { path: "tutor/my-applications", element: <MyApplications /> },
-    //       { path: "tutor/ongoing-tuitions", element: <OngoingTuitions /> },
-    //       { path: "tutor/revenue", element: <Revenue /> },
-    
-
-
-    // // Admin
-    // { path: "admin/users", element: <Users /> },
-    //       { path: "admin/tuitions", element: <Tuitions /> },
-    //       { path: "admin/reports", element: <Reports /> },
-    //     ],
-    //   },
-
-    //   {
-    //     path: "dashboard/tutor",
-    //     element: <TutorDashboard />,
-    //   },
-    //   {
-    //     path: "login",
-    //     element: <Login />,
-    //   },
-    //   {
-    //     path: "register",
-    //     element: <Register />,
-    //   },
-
-
-    // dashboard layout fix korci 

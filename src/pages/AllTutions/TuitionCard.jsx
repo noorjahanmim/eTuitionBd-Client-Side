@@ -60,7 +60,7 @@ const TuitionCard = ({ tuition }) => {
           {/* Spacer to push button down */}
           <div className="flex-grow"></div>
 
-          {/* CTA Button - No Black, Pure Primary Gradient */}
+          
           <Link
             to={`/tuitions/${tuition._id}`}
             className="group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden"

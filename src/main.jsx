@@ -14,12 +14,15 @@ AOS.init();
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <div>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
     </QueryClientProvider>
     <Toaster />
-  </StrictMode>
+  </div>
 );
+
+
+// w8

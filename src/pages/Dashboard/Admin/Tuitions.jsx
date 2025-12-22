@@ -10,71 +10,67 @@ const Tuitions = () => {
   // Load all tuitions
   useEffect(() => {
     axiosSecure
-      .get("/tuitions")
+      .get("/tuitions/admin")
       .then((res) => setTuitions(res.data))
       .catch((err) => console.log(err));
-  }, [axiosSecure]);
+  }, []);
 
   // ---- Approve Handler ----
-  const handleApprove = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to approve this tuition?",
+  const handleApprove = async (id) => {
+    const confirm = await Swal.fire({
+      title: "Approve Tuition?",
+      text: "You are approving this tuition post",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, Approve",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .patch(`/tuitions/${id}/status`, { status: "Approved" })
-          .then((res) => {
-            if (res.data.modifiedCount > 0 || res.data.success) {
-              Swal.fire("Approved!", "Tuition has been approved.", "success");
-
-              setTuitions((prev) =>
-                prev.map((t) =>
-                  t._id === id ? { ...t, status: "Approved" } : t
-                )
-              );
-            }
-          })
-          .catch(() =>
-            Swal.fire("Error", "Something went wrong!", "error")
-          );
-      }
     });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const res = await axiosSecure.patch(`/tuitions/approve/${id}`);
+
+      if (res.data.modifiedCount > 0) {
+        Swal.fire("Approved!", "Tuition has been approved.", "success");
+
+        setTuitions((prev) =>
+          prev.map((t) =>
+            t._id === id ? { ...t, status: "Approved" } : t
+          )
+        );
+      }
+    } catch {
+      Swal.fire("Error", "Something went wrong!", "error");
+    }
   };
 
   // ---- Reject Handler ----
-  const handleReject = (id) => {
-    Swal.fire({
+  const handleReject = async (id) => {
+    const confirm = await Swal.fire({
       title: "Reject Tuition?",
-      text: "Once rejected, tutors cannot see this post.",
+      text: "Once rejected tutors cannot see this tuition",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, Reject",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .patch(`/tuitions/${id}/status`, { status: "Rejected" })
-          .then((res) => {
-            if (res.data.modifiedCount > 0 || res.data.success) {
-              Swal.fire("Rejected!", "Tuition has been rejected.", "success");
-
-              setTuitions((prev) =>
-                prev.map((t) =>
-                  t._id === id ? { ...t, status: "Rejected" } : t
-                )
-              );
-            }
-          })
-          .catch(() =>
-            Swal.fire("Error", "Something went wrong!", "error")
-          );
-      }
     });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const res = await axiosSecure.patch(`/tuitions/reject/${id}`);
+
+      if (res.data.modifiedCount > 0) {
+        Swal.fire("Rejected!", "Tuition has been rejected.", "success");
+
+        setTuitions((prev) =>
+          prev.map((t) =>
+            t._id === id ? { ...t, status: "Rejected" } : t
+          )
+        );
+      }
+    } catch {
+      Swal.fire("Error", "Something went wrong!", "error");
+    }
   };
 
   return (
@@ -128,4 +124,3 @@ const Tuitions = () => {
 };
 
 export default Tuitions;
-

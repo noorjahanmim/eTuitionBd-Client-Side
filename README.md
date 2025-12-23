@@ -1,16 +1,115 @@
-# React + Vite
+# 📚 eTuitionBD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A complete Tuition Management System for students, tutors, and admins to manage tuition activities, applications, payments, and communication.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Site
+(https://etuitionbd-client.web.app)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🎯 Project Purpose
+To solve the real-world problem of finding qualified tutors and verified tuition opportunities.  
+The platform streamlines student–tutor interaction, automates workflows, and ensures secure payments and transparent communication.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Features
+
+### 🔐 Authentication
+- Register as Student or Tutor  
+- Firebase Auth with Google Login  
+- JWT-based role routing  
+
+### 🏠 Public Pages
+- Home (Hero, Latest Tuitions, Latest Tutors, Framer Motion animations)  
+- Tuitions Listing & Details  
+- Tutors Listing & Profile  
+- About, Contact  
+
+### 📊 Student Dashboard
+- Post New Tuition  
+- View & Manage My Tuitions  
+- View Applied Tutors  
+- Approve/Reject Applications  
+- Stripe Payment Integration  
+- Payment History  
+- Profile Settings  
+
+### 🧑‍🏫 Tutor Dashboard
+- Apply to Tuition Posts  
+- Track My Applications  
+- View Ongoing Tuitions  
+- Revenue History  
+
+### 🛡️ Admin Dashboard
+- Manage Users (Update/Delete/Change Roles)  
+- Approve/Reject Tuition Posts  
+- View Reports & Earnings  
+
+### 📈 Extra Functionalities
+- Protected Routes with JWT Role Verification  
+- Responsive UI for all devices  
+- Loading Spinner & Error Page  
+- Pagination, Search, Sort, Filter  
+- Charts for Admin Analytics  
+
+---
+
+## 🧪 Technologies Used
+
+### 🧑‍💻 Client
+- React.js  
+- React Router DOM  
+- Firebase Auth  
+- Framer Motion  
+- Axios  
+- Stripe.js  
+- DaisyUI + TailwindCSS  
+
+### 🛠️ Server
+- Node.js  
+- Express.js  
+- MongoDB  
+- JWT  
+- Stripe API  
+- dotenv  
+
+---
+
+## 📦 Packages
+- react-router-dom  
+- firebase  
+- axios  
+- framer-motion  
+- sweetalert2  
+- react-hot-toast  
+- @stripe/stripe-js  
+- @tanstack/react-query  
+
+---
+
+## 🔐 Environment Variables
+- Firebase keys stored in `.env`  
+- MongoDB credentials secured via `.env`  
+- Stripe Secret Key stored securely  
+
+---
+
+## ✅ Deployment Checklist
+- No CORS / 404 / 504 issues  
+- Private routes persist after reload  
+- Firebase authorized domain updated  
+- Minimum 20 client commits & 12 server commits  
+
+---
+
+## 📤 Submission
+- Admin Email & Password  
+- Live Site Link  
+- GitHub Repo (Client & Server)  
+
+---
+
+### Built with ❤️ for the eTuitionBD challenge

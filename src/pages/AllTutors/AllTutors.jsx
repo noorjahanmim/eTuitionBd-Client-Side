@@ -31,7 +31,7 @@ useEffect(() => {
         {/* Header & Search */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">All Available Tutors</h2>
+            <h2 className="text-2xl mb-2 font-bold text-gray-800">All <span className=" bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide">Available</span> Tutors</h2>
             <p className="text-sm text-gray-500">Find the right mentor for your academic needs</p>
           </div>
           {/* <div className="relative w-full md:w-80">

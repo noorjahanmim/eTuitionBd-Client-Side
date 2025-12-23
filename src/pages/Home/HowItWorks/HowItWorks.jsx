@@ -77,7 +77,7 @@ const HowItWorks = () => {
           <motion.h2 
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl font-extrabold text-primary mb-6"
+            className="text-4xl font-extrabold text-primary mb-6  bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide"
           >
             How it Works?
           </motion.h2>

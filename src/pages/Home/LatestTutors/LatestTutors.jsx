@@ -49,7 +49,7 @@ const LatestTutors = () => {
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black mt-3 mb-4 bg-gradient-to-r from-base-content to-base-content/60 bg-clip-text text-transparent"
+            className="text-4xl md:text-5xl font-black mt-3 mb-4 bg-gradient-to-r from-base-content to-base-content/60 bg-clip-text text-transparent  bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide"
           >
             Meet Our Top Tutors
           </motion.h2>

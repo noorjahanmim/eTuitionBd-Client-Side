@@ -87,7 +87,7 @@ const About = () => {
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-              Revolutionizing the way you find <span className="text-primary">Tutors.</span>
+              Revolutionizing the way you find <span className=" bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide">Tutors.</span>
             </h2>
             <p className="text-gray-600 leading-relaxed">
               We believe quality education is a right, not a luxury. Our automated matching algorithm ensures you find a tutor who understands your unique pace of learning in less than 24 hours.
@@ -105,7 +105,7 @@ const About = () => {
 
       {/* STATS */}
       <section className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 ">
           <Counter value={500} label="Students Helped" />
           <Counter value={200} label="Verified Tutors" />
           <Counter value={50} label="Subjects Covered" />
@@ -136,7 +136,7 @@ const About = () => {
   {/* Title with subtle accent */}
   <div className="relative inline-block">
     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-      📘 Learning Made <span className="text-primary relative">Simple
+      📘 Learning Made <span className=" bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-widerelative">Simple
         <svg className="absolute -bottom-1 left-0 w-full h-2 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none">
           <path d="M0 5 Q 25 0, 50 5 T 100 5" stroke="currentColor" strokeWidth="4" fill="transparent" />
         </svg>

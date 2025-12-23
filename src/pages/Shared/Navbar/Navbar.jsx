@@ -36,7 +36,7 @@ const NavBar = () => {
     <div className="sticky top-0 z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
 {/* Logo */}
-        <span className="text-xl">
+        <span className="text-xl flex items-center gap-2">
                     <Logo></Logo>
                 </span>
         
@@ -44,7 +44,7 @@ const NavBar = () => {
       
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-6 font-medium">
-          <ul className="flex gap-6">{links}</ul>
+          <ul className="flex gap-4">{links}</ul>
         </div>
 
         {/* Right Side */}

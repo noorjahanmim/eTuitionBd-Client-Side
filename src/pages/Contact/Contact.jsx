@@ -41,7 +41,7 @@ const Contact = () => {
           animate={{ opacity: 1, y: 0 }}
           className="container mx-auto px-6 text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Get In <span className="text-primary">Touch</span></h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Get In <span className=" bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide">Touch</span></h1>
           <p className="text-gray-600 max-w-xl mx-auto">
             Have a question about our platform or need assistance? Our team is here to help you 24/7.
           </p>

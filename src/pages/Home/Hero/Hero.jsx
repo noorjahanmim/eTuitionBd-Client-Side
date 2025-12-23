@@ -43,7 +43,7 @@ const Hero = () => {
               </div>
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] text-slate-900 tracking-tight">
-                Find the Perfect <span className="text-primary">Tutor</span> <br className="hidden lg:block" /> 
+                Find the Perfect <span className=" bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent md:text-2xltracking-wide">Tutor</span> <br className="hidden lg:block" /> 
                 for Your Success
               </h1>
 

@@ -44,7 +44,7 @@ const WhyChooseUs = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent  tracking-wide bg-gradient-to-r from-primary via-indigo-500 to-primary bg-clip-text text-transparent text-xl md:text-2xl font-bold tracking-wide">
             Why Choose eTuitionBd?
           </h2>
           <p className="max-w-2xl mx-auto text-base-content/70">

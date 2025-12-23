@@ -7,9 +7,9 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 const AllTutors = () => {
   const axiosSecure = useAxiosSecure();
   const [tutors, setTutors] = useState([]);
-  const [, setPage] = useState(1);
+  // const [, setPage] = useState(1);
   // const [totalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
 
 
 useEffect(() => {
@@ -34,7 +34,7 @@ useEffect(() => {
             <h2 className="text-2xl font-bold text-gray-800">All Available Tutors</h2>
             <p className="text-sm text-gray-500">Find the right mentor for your academic needs</p>
           </div>
-          <div className="relative w-full md:w-80">
+          {/* <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
@@ -45,7 +45,7 @@ useEffect(() => {
                 setPage(1);
               }}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Tutors Grid */}

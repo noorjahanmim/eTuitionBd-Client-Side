@@ -59,7 +59,7 @@ const Hero = () => {
               <div className="mt-10 flex flex-wrap justify-center md:justify-start gap-4">
                 <Link 
                   to="/all-tuitions" 
-                  className="btn btn-primary btn-lg rounded-2xl shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2 px-10 group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden "
+                  className="btn btn-primary btn-lg rounded-2xl shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2 px-10 group/btn relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-indigo-500 to-primary bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-2xl shadow-lg shadow-primary/25 overflow-hidden"
                 >
                   <Search size={20} />
                   Find Tuitions
